@@ -29,8 +29,10 @@
                 <a class="nav-link" href="{% url 'about' %}">About</a>
 
                 {% if user.is_authenticated %}
+               <a class="nav-link" href="{% url 'list' %}">Posts</a>
                <a class="nav-link" href="{% url 'new' %}">New Post</a>
                <a class="nav-link" href="{% url 'drafts' %}">Drafts</a>
+               <a class="nav-link" href="{% url 'archived' %}">Achives</a>
                <form method="POST" action="{% url 'logout' %}"></form>
                     {% csrf_token %}
                     <input type="submit" class="nav-link" value="Log Out">

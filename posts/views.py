@@ -3,7 +3,7 @@ from django.views.generic import (
     DetailView,
     CreateView,
     UpdateView,
-    DeleteView
+    DeleteView,
 )
 from .models import Post, Status
 from django.urls import reverse_lazy
@@ -28,14 +28,14 @@ class PostListView(ListView):
         return context
 
 class DraftPostListView(LoginRequiredMixin, ListView):
-    template_name = "posts_list.html"
+    template_name = "posts/list.html"
     model = Post
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         draft = Status.objects.get(name="draft")
         context["title"] = "Drafts"
-        context["posts_list"] = (
+        context["post_list"] = (
             Post.objects
             .filter(status=draft)
             .filter(author=self.request.user)
@@ -43,10 +43,39 @@ class DraftPostListView(LoginRequiredMixin, ListView):
         )
         return context
     
+class ArchivedPostListView(LoginRequiredMixin, ListView):
+    template_name = "posts/list.html"
+    model = Post
 
-class PostDetailView(DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        archived = Status.objects.get(name="archived") 
+        context["title"] = "Archived"
+        context["post_list"] = (
+            Post.objects
+            .filter(status=archived)
+            .filter(author=self.request.user)  
+            .order_by("created_on").reverse()
+        )
+        return context
+
+class PostDetailView(UserPassesTestMixin, DetailView):
     template_name = "posts/detail.html"
     model = Post
+
+    def test_func(self):
+        post = self.get_object()
+        if post.status.name == "published":
+            return True
+        elif post.status.name == "draft":
+            if(self.request.user.is_authenticated
+                    and self.request.user == post.author):
+                return True
+        elif (post.status.name == "archived"
+                and self.request.user.is_authenticated):
+            return True
+        else:
+            return False
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = "posts/new.html"
@@ -54,7 +83,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     fields = ["title", "subtitle", "body", "status"]
 
     def form_valid(self, form):
-        form.instance.autjor = self.request.user
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
