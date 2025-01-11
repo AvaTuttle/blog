@@ -8,13 +8,14 @@
     rel="stylesheet" 
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
     crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/base.css">
 
     <title>Document</title>
 </head>
 <body>
     <na class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home'}">My Blog</a>
+            <a class="navbar-brand" href="{% url 'home' %}">My Blog</a>
             <button
             class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
@@ -28,7 +29,9 @@
                 <a class="nav-link" href="{% url 'about' %}">About</a>
 
                 {% if user.is_authenticated %}
-                <form method="POST">
+               <a class="nav-link" href="{% url 'new' %}">New Post</a>
+               <a class="nav-link" href="{% url 'drafts' %}">Drafts</a>
+               <form method="POST" action="{% url 'logout' %}"></form>
                     {% csrf_token %}
                     <input type="submit" class="nav-link" value="Log Out">
                 </form>

@@ -1,0 +1,50 @@
+/* Base styling for consistency across the site */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar-brand,
+.nav-link {
+    color: #fff !important;
+}
+
+.navbar-brand:hover,
+.nav-link:hover {
+    color: #ffc107 !important;
+}
+
+/* About page specific styles */
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
+    font-weight: bold;
+}
+
+.about-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+}
+
+.about-content p {
+    margin-bottom: 15px;
+}
